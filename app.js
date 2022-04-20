@@ -5,7 +5,8 @@ let direction = 1;
 let invadersId;
 let goingRight = true;
 const resultsDisplay = document.querySelector('.results');
-let aliensRemoves = [];
+let aliensRemoved = [];
+let results = 0;
 
 for (let i = 0; i < 225; i++) {
   const square = document.createElement('div');
@@ -20,7 +21,8 @@ const alienInvaders = [
 
 function draw() {
   for (let i = 0; i < alienInvaders.length; i++) {
-    squares[alienInvaders[i]].classList.add('invader');
+    if (!aliensRemoved.includes(i))
+      squares[alienInvaders[i]].classList.add('invader');
   }
 }
 
@@ -93,9 +95,13 @@ function moveInvaders() {
       clearInterval(invadersId);
     }
   }
+  if (aliensRemoved.length === alienInvaders.length) {
+    resultsDisplay.innerHTML = 'YOU WIN';
+    clearInterval(invadersId);
+  }
 }
 
-invadersId = setInterval(moveInvaders, 100);
+invadersId = setInterval(moveInvaders, 300);
 
 function shoot(e) {
   let laserId;
@@ -117,7 +123,9 @@ function shoot(e) {
       clearInterval(laserId);
 
       const alienRemoved = alienInvaders.indexOf(currentLaserIndex);
-      aliensRemoves.push(alienRemoved);
+      aliensRemoved.push(alienRemoved);
+      results++;
+      resultsDisplay.innerHTML = results;
     }
   }
   switch (e.key) {
